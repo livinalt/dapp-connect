@@ -7,6 +7,10 @@ This is a React-based web application that allows users to connect their Ethereu
 - **Address Balance Fetching**: Fetch and display the Ethereum balance of any input Ethereum address.
 - **Network Info**: Display information such as ChainID, latest block, and the current network.
 - **Automatic Updates**: Listens to account changes, chain changes, and block updates.
+
+## Deployment Link
+https://dapp-connect-mzqp.vercel.app/
+
   
 ## Installation
 
