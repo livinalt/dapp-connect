@@ -1,20 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-interface Window {
-  ethereum: {
-    request: (args: { method: string; params?: any[] }) => Promise<any>;
-    on: (event: string, callback: (...args: any[]) => void) => void;
-    removeListener: (event: string, callback: (...args: any[]) => void) => void;
-  };
-}
-
 const AddressForm = () => {
   const [chainId, setChainId] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<string[]>([]);
   const [block, setBlock] = useState<any>(null);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+
   const [inputAddress, setInputAddress] = useState<string>('');
   const [balance, setBalance] = useState<string | null>(null);
   const [network, setNetwork] = useState<string | null>(null);
@@ -55,7 +48,8 @@ const AddressForm = () => {
         method: 'eth_chainId',
       });
       setChainId(chainId);
-    } catch (error: any) {
+    } 
+    catch (error: any) {
       console.error(`Error fetching chainId: ${error.code}: ${error.message}`);
     }
   };
@@ -67,7 +61,9 @@ const AddressForm = () => {
         params: ['latest', true],
       });
       setBlock(block);
-    } catch (error: any) {
+    } 
+    
+    catch (error: any) {
       console.error(
         `Error fetching last block: ${error.message}. Code: ${error.code}. Data: ${error.data}`
       );
@@ -81,7 +77,9 @@ const AddressForm = () => {
         params: [address, 'latest'],
       });
       setBalance((parseInt(balance, 16) / 10 ** 18).toFixed(4));
-    } catch (error: any) {
+    } 
+    
+    catch (error: any) {
       console.error(`Error fetching balance: ${error.message}`);
     }
   };
@@ -100,7 +98,7 @@ const AddressForm = () => {
     fetchLatestBlock();
   }, []);
 
-  const handleDisconnect = useCallback(() => {
+  const handleDisconnect = useCallback((code: number) => {
     disconnectWallet();
   }, []);
 
@@ -176,15 +174,15 @@ const AddressForm = () => {
                 className="w-full mt-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
-              <button
-                onClick={handleGetDetails}
-                className="bg-red-700 w-full mt-2 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
-              >
-                Submit
-              </button>
+            <button
+              onClick={handleGetDetails}
+              className="bg-red-700 w-full mt-2 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
+            >
+              Submit
+            </button>
             </div>
 
-            <div>
+            <div className="">
               <p className="text-gray-100 font-medium">
                 Address: <span className="text-white">{inputAddress}</span>
               </p>
@@ -192,7 +190,7 @@ const AddressForm = () => {
                 Balance: <span className="text-white">{balance ? `${balance} ETH` : 'not available'}</span>
               </p>
               <p className="text-gray-100 font-medium">
-                Network: <span className="text-white">{network || 'not available'}</span>
+                Network: <span className="text-whte">{network || 'not available'}</span>
               </p>
               <p className="text-gray-100 font-medium">
                 ChainID: <span className="text-white">{chainId || 'not available'}</span>
