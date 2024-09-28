@@ -1,29 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-declare global {
-  interface Window {
-    ethereum: any;
-  }
-}
 
 const AddressForm = () => {
   const [chainId, setChainId] = useState<string | null>(null);
-  const [accounts, setAccounts] = useState<string[]>([]);
-  const [block, setBlock] = useState<any>(null);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-
   const [inputAddress, setInputAddress] = useState<string>('');
   const [balance, setBalance] = useState<string | null>(null);
   const [network, setNetwork] = useState<string | null>(null);
 
   const connectWallet = async () => {
     try {
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts',
-      });
-      setAccounts(accounts);
       setIsConnected(true);
       fetchChainId();
       fetchLatestBlock();
@@ -34,9 +22,7 @@ const AddressForm = () => {
   };
 
   const disconnectWallet = () => {
-    setAccounts([]);
     setChainId(null);
-    setBlock(null);
     setIsConnected(false);
 
     if (subscriptionId) {
@@ -61,11 +47,6 @@ const AddressForm = () => {
 
   const fetchLatestBlock = async () => {
     try {
-      const block = await window.ethereum.request({
-        method: 'eth_getBlockByNumber',
-        params: ['latest', true],
-      });
-      setBlock(block);
     } catch (error: any) {
       console.error(
         `Error fetching last block: ${error.message}. Code: ${error.code}. Data: ${error.data}`
@@ -75,20 +56,17 @@ const AddressForm = () => {
 
   const fetchBalance = async (address: string) => {
     try {
-      const balanceHex = await window.ethereum.request({
+      const balance = await window.ethereum.request({
         method: 'eth_getBalance',
         params: [address, 'latest'],
       });
-      const balanceInEth = (parseInt(balanceHex, 16) / 10 ** 18).toFixed(4);
-      setBalance(balanceInEth);
+      setBalance((parseInt(balance, 16) / 10 ** 18).toFixed(4));
     } catch (error: any) {
       console.error(`Error fetching balance: ${error.message}`);
-      setBalance(null); // Set balance to null if an error occurs
     }
   };
 
   const handleAccountsChanged = useCallback((newAccounts: string[]) => {
-    setAccounts(newAccounts);
     if (newAccounts.length === 0) {
       disconnectWallet();
     } else {
@@ -116,8 +94,6 @@ const AddressForm = () => {
       window.ethereum.on('message', (message: any) => {
         if (message.type === 'eth_subscription' && message.data.subscription === subscriptionId) {
           if ('result' in message.data && typeof message.data.result === 'object') {
-            const newBlock = message.data.result;
-            setBlock(newBlock);
           }
         }
       });
@@ -128,8 +104,8 @@ const AddressForm = () => {
 
   const handleGetDetails = async () => {
     await fetchBalance(inputAddress);
-    const networkId = await window.ethereum.request({ method: 'net_version' });
-    setNetwork(networkId);
+    const network = await window.ethereum.request({ method: 'net_version' });
+    setNetwork(network);
   };
 
   useEffect(() => {
@@ -185,7 +161,7 @@ const AddressForm = () => {
               </button>
             </div>
 
-            <div>
+            <div className="">
               <p className="text-gray-100 font-medium">
                 Address: <span className="text-white">{inputAddress}</span>
               </p>
