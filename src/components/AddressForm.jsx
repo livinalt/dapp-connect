@@ -184,7 +184,7 @@ const AddressForm = () => {
               </button>
             </div>
 
-            <div className="">
+            <div>
               <p className="text-gray-100 font-medium">
                 Address: <span className="text-white">{inputAddress}</span>
               </p>
