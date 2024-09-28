@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
+
 const AddressForm = () => {
   const [chainId, setChainId] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<string[]>([]);
