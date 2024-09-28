@@ -1,50 +1,69 @@
-# React + TypeScript + Vite
+# Wallet Screener Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a React-based web application that allows users to connect their Ethereum wallet, fetch the balance of a specific address, and display basic network details (ChainID, Network, and latest Block info). 
 
-Currently, two official plugins are available:
+## Features:
+- **Connect/Disconnect Wallet**: Users can connect their Ethereum wallet (MetaMask) and disconnect it at any time.
+- **Address Balance Fetching**: Fetch and display the Ethereum balance of any input Ethereum address.
+- **Network Info**: Display information such as ChainID, latest block, and the current network.
+- **Automatic Updates**: Listens to account changes, chain changes, and block updates.
+  
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Clone this repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-## Expanding the ESLint configuration
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+3. Run the application:
+   ```bash
+   npm start
+   ```
 
-- Configure the top-level `parserOptions` property like this:
+4. The app should now be running at `http://localhost:5134`.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Usage
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Connecting Your Wallet
+- When you open the application, the "Connect Wallet" button will appear at the top-right corner.
+- Click on the button to connect your Ethereum wallet (MetaMask).
+- Once connected, you can view your wallet information and screen for other addresses' balances.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Entering an Ethereum Address
+- Input any valid Ethereum address in the text field provided.
+- Click the "Submit" button to fetch the ETH balance and network details for that address.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Disconnecting the Wallet
+- After connecting, a "Disconnect Wallet" button will replace the "Connect Wallet" button.
+- Click the button to disconnect your wallet
+
+## Dependencies
+
+- **React**
+- **React Toastify**
+- **MetaMask**
+- **Tailwind CSS**
+
+## MetaMask Integration
+
+The app uses `window.ethereum` from the MetaMask provider to perform various Ethereum-related actions:
+- **eth_requestAccounts**: Requests user accounts to connect to the app.
+- **eth_chainId**: Retrieves the chain ID of the connected network.
+- **eth_getBalance**: Retrieves the balance of the specified Ethereum address.
+- **eth_subscribe**: Subscribes to new block updates.
+
+## Handling Chain and Account Changes
+
+The application listens for account and chain changes using the `window.ethereum.on` event listener:
+- **accountsChanged**: Updates the state if the user switches Ethereum accounts.
+- **chainChanged**: Refreshes chain details and latest block info when the user switches the network.
+  
+
+## License
+This project is licensed under the MIT License.
